@@ -1,9 +1,10 @@
-import { Divider, Grid, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
-import axios from 'axios';
+import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Product } from '../../app/models/product';
-import CircularProgress from '@mui/material/CircularProgress';
+import agent from '../../app/api/agent';
+import NotFound from '../../app/errors/NotFound';
+import LoadingComponent from '../../app/layout/LoadingComponent';
 
 const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,24 +12,19 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/products/${id}`)
-      .then((res) => setproduct(res.data))
+    id && agent.Catalog.details(id)
+      .then((res) => setproduct(res))
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   }, [id]);
 
   if (loading) {
     return (
-      <Stack alignItems='center' justifyContent='center'>
-        <CircularProgress />
-      </Stack>
+      <LoadingComponent message='Loading product...' />
     )
   }
 
-  if(!product) {
-    return <Typography variant='h2'>Product not found</Typography>
-  }
+  if(!product) return <NotFound />
 
   return (
     <Grid container spacing={6}>
