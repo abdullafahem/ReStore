@@ -101,7 +101,20 @@ const Header = ({ darkMode, handleThemeChange }: Props) => {
           alignItems: "center",
         }}
       >
-        <Typography variant="h6" component={NavLink} to="/" sx={navStyles}>
+        <Typography
+          variant="h6"
+          component={NavLink}
+          to="/"
+          sx={navStyles}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <img
+            src="/images/logo.png"
+            alt="logo"
+            style={{ height: 35, marginRight: 5 }}
+          />
           RE-STORE
         </Typography>
 
