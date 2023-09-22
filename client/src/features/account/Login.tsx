@@ -8,13 +8,14 @@ import {
   Typography,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FieldValues, useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch } from "../../app/store/configureStore";
 import { signInUser } from "./accountSlice";
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const {
     register,
@@ -25,8 +26,12 @@ const Login = () => {
   });
 
   async function submitForm(data: FieldValues) {
-    await dispatch(signInUser(data));
-    navigate("/catalog");
+    try {
+      await dispatch(signInUser(data));
+      navigate(location.state?.from || "/catalog");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
